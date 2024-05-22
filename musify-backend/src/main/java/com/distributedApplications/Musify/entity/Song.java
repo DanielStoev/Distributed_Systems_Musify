@@ -14,19 +14,24 @@ public class Song {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column
+    @Column(nullable = false)
     private String title;
 
-    @Column
+    @Column(nullable = false)
     private Double duration;
 
-    @Column
     @ManyToOne
+    @JoinColumn(name = "album_id", nullable = false)
+    private Album album;
+
+    @ManyToOne
+    @JoinColumn(name = "artist_id", nullable = false)
     private Artist artist;
 
     @Column(length = 50)
     private String genre;
 
     @Column
+    @Temporal(TemporalType.DATE)
     private Date releaseDate;
 }

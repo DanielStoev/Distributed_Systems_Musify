@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Artist } from './artist.model'; // Define this model according to your Artist entity
+import { Artist } from './model/artist.model';
 
 @Injectable({
   providedIn: 'root'

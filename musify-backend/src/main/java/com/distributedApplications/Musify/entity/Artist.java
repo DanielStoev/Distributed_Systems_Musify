@@ -18,17 +18,16 @@ public class Artist {
     @Column(nullable = false, length = 100)
     private String name;
 
-    @Column
-    @OneToMany
-    private List<Song> songs;
-
-    @Column
-    @OneToMany
+    @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Album> albums;
+
+    @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Song> songs;
 
     @Column(length = 50)
     private String country;
 
     @Column
+    @Temporal(TemporalType.DATE)
     private Date birthDate;
 }

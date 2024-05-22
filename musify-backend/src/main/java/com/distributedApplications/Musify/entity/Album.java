@@ -24,11 +24,10 @@ public class Album {
     @Column
     private Date releaseDate;
 
-    @Column
     @ManyToOne
+    @JoinColumn(name = "artist_id", nullable = false)
     private Artist artist;
 
-    @Column
-    @OneToMany
+    @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Song> songs;
 }
