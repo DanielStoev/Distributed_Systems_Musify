@@ -21,23 +21,23 @@ public class ArtistService {
         return artistRepository.findById(id);
     }
 
-    public Artist findByName(String name) {
+    public Artist getByName(String name) {
         return artistRepository.findByName(name);
     }
 
     @Transactional
-    public Artist createArtist(Artist artist) {
-        return artistRepository.save(artist);
+    public void createArtist(Artist artist) {
+        artistRepository.save(artist);
     }
 
     @Transactional
-    public Artist updateArtist(int id, Artist artistDetails) {
-        Artist artist = getArtistById(id);
+    public void updateArtist(Artist artistDetails) {
+        Artist artist = getArtistById(artistDetails.getId());
         artist.setName(artistDetails.getName());
         artist.setCountry(artistDetails.getCountry());
         artist.setBirthDate(artistDetails.getBirthDate());
         updateArtistCollections(artist, artistDetails);
-        return artistRepository.save(artist);
+        artistRepository.save(artist);
     }
 
     @Transactional
