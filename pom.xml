@@ -15,7 +15,6 @@
 
 	<modules>
 		<module>musify-backend</module>
-		<module>musify-frontend</module>
 	</modules>
 
 	<dependencyManagement>
