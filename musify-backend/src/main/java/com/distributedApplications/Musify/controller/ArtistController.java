@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/artists")
+@CrossOrigin(origins = "http://localhost:4200")
 public class ArtistController {
     @Autowired
     private ArtistService artistService;

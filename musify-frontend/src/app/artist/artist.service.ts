@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Artist } from './model/artist.model';
+import { Artist } from '../model/artist.model';
+import {HttpClient} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +20,7 @@ export class ArtistService {
   }
 
   getArtistByName(name: string): Observable<Artist> {
-    return this.http.get<Artist>(`${this.apiUrl}/${name}`);
+    return this.http.get<Artist>(`${this.apiUrl}?name=${name}`);
   }
 
   addArtist(artist: Artist): Observable<Artist> {
@@ -28,7 +28,7 @@ export class ArtistService {
   }
 
   updateArtist(artist: Artist): Observable<Artist> {
-    return this.http.put<Artist>(this.apiUrl, artist);
+    return this.http.put<Artist>(`${this.apiUrl}/${artist.id}`, artist);
   }
 
   deleteArtist(id: number): Observable<void> {

@@ -8,26 +8,22 @@
 
   <div *ngIf="selectedArtist">
     <h2>Edit Artist</h2>
-    <label>Name: <input [(ngModel)]="selectedArtist.name" placeholder="Name" /></label>
-    <label>Country: <input [(ngModel)]="selectedArtist.country" placeholder="Country" /></label>
-    <label>Birth Date: <input [(ngModel)]="selectedArtist.birthDate" type="date" /></label>
-    <h3>Songs</h3>
-    <ul>
-      <li *ngFor="let song of selectedArtist.songs">{{ song.title }} ({{ song.genre }})</li>
-    </ul>
-    <h3>Albums</h3>
-    <ul>
-      <li *ngFor="let album of selectedArtist.albums">{{ album.title }} ({{ album.releaseDate | date }})</li>
-    </ul>
-    <button (click)="updateArtist()">Update</button>
-    <button (click)="deleteArtist(selectedArtist.id)">Delete</button>
+    <form #editForm="ngForm" (ngSubmit)="updateArtist()">
+      <label>Name: <input [(ngModel)]="selectedArtist.name" name="name" required /></label>
+      <label>Country: <input [(ngModel)]="selectedArtist.country" name="country" required /></label>
+      <label>Birth Date: <input [(ngModel)]="selectedArtist.birthDate" type="date" name="birthDate" required /></label>
+      <button type="submit" [disabled]="!editForm.form.valid">Update</button>
+      <button type="button" (click)="deleteArtist(selectedArtist.id)">Delete</button>
+    </form>
   </div>
 
   <div>
     <h2>Add New Artist</h2>
-    <label>Name: <input [(ngModel)]="newArtist.name" placeholder="Name" /></label>
-    <label>Country: <input [(ngModel)]="newArtist.country" placeholder="Country" /></label>
-    <label>Birth Date: <input [(ngModel)]="newArtist.birthDate" type="date" /></label>
-    <button (click)="addArtist()">Add</button>
+    <form #addForm="ngForm" (ngSubmit)="addArtist()">
+      <label>Name: <input [(ngModel)]="newArtist.name" name="name" required /></label>
+      <label>Country: <input [(ngModel)]="newArtist.country" name="country" required /></label>
+      <label>Birth Date: <input [(ngModel)]="newArtist.birthDate" type="date" name="birthDate" required /></label>
+      <button type="submit" [disabled]="!addForm.form.valid">Add</button>
+    </form>
   </div>
 </div>
