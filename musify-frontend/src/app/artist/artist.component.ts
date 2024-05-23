@@ -51,6 +51,7 @@ export class ArtistComponent implements OnInit {
   addArtist(): void {
     this.artistService.addArtist(this.newArtist).subscribe({
       next: () => {
+        this.loadArtists();
         this.newArtist = {
           id: 0,
           name: '',
