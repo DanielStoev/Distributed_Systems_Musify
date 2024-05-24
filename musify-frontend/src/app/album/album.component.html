@@ -1,3 +1,39 @@
 <div>
   <h1>Albums</h1>
+  <ul>
+    <li *ngFor="let album of albums" (click)="selectAlbum(album)">
+      {{ album.title }} ({{ album.artist.name }})
+    </li>
+  </ul>
+
+  <div *ngIf="selectedAlbum">
+    <h2>Edit Album</h2>
+    <form #editForm="ngForm" (ngSubmit)="updateAlbum()">
+      <label>Title: <input [(ngModel)]="selectedAlbum.title" name="title" required /></label>
+      <label>Number of Songs: <input [(ngModel)]="selectedAlbum.numberOfSongs" type="number" name="numberOfSongs" required /></label>
+      <label>Release Date: <input [(ngModel)]="selectedAlbum.releaseDate" type="date" name="releaseDate" required /></label>
+      <label>Artist:
+        <select [(ngModel)]="selectedAlbum.artist.id" name="artist" required>
+          <option *ngFor="let artist of artists" [value]="artist.id">{{ artist.name }}</option>
+        </select>
+      </label>
+      <button type="submit" [disabled]="!editForm.form.valid">Update</button>
+      <button type="button" (click)="deleteAlbum(selectedAlbum.id)">Delete</button>
+    </form>
+  </div>
+
+  <div>
+    <h2>Add New Album</h2>
+    <form #addForm="ngForm" (ngSubmit)="addAlbum()">
+      <label>Title: <input [(ngModel)]="newAlbum.title" name="title" required /></label>
+      <label>Number of Songs: <input [(ngModel)]="newAlbum.numberOfSongs" type="number" name="numberOfSongs" required /></label>
+      <label>Release Date: <input [(ngModel)]="newAlbum.releaseDate" type="date" name="releaseDate" required /></label>
+      <label>Artist:
+        <select [(ngModel)]="newAlbum.artist.id" name="artist" required>
+          <option *ngFor="let artist of artists" [value]="artist.id">{{ artist.name }}</option>
+        </select>
+      </label>
+      <button type="submit" [disabled]="!addForm.form.valid">Add</button>
+    </form>
+  </div>
 </div>

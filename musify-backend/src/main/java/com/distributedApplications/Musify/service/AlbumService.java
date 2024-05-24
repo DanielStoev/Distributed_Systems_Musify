@@ -38,8 +38,7 @@ public class AlbumService {
             album.setNumberOfSongs(albumDetails.getNumberOfSongs());
             album.setReleaseDate(albumDetails.getReleaseDate());
             album.setArtist(albumDetails.getArtist());
-            album.getSongs().clear();
-            album.getSongs().addAll(albumDetails.getSongs());
+            album.setSongs(albumDetails.getSongs() != null ? albumDetails.getSongs() : album.getSongs());
             albumRepository.save(album);
         }
     }
