@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -18,11 +19,11 @@ public class Artist {
     @Column(nullable = false, length = 100)
     private String name;
 
-    @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Album> albums;
+    @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL)
+    private List<Album> albums = new ArrayList<>();
 
-    @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Song> songs;
+    @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL)
+    private List<Song> songs = new ArrayList<>();
 
     @Column(length = 50)
     private String country;

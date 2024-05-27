@@ -37,6 +37,7 @@ public class ArtistService {
         Artist artistEntity = new Artist();
 
         if (artist.isPresent()) {
+            artistEntity.setId(artistDTO.getId());
             artistEntity.setName(artistDTO.getName());
             artistEntity.setCountry(artistDTO.getCountry());
             artistEntity.setBirthDate(artistDTO.getBirthDate());
