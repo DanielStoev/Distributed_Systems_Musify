@@ -1,21 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { ArtistService } from './artist.service';
-import { Artist } from '../model/artist.model';
-import { NgForOf, NgIf } from "@angular/common";
-import { FormsModule } from "@angular/forms";
-import { HttpClientModule } from '@angular/common/http';
+import {Component, OnInit} from '@angular/core';
+import {NgFor, NgIf} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {HttpClientModule} from '@angular/common/http';
+import {ArtistService} from './artist.service';
+import {Artist} from '../model/artist.model';
 
 @Component({
   selector: 'app-artist',
   standalone: true,
+  imports: [NgIf, NgFor, FormsModule, HttpClientModule],
   templateUrl: './artist.component.html',
-  imports: [
-    NgIf,
-    NgForOf,
-    FormsModule,
-    HttpClientModule
-  ],
-  styleUrl: './artist.component.css',
+  styleUrls: ['./artist.component.css'],
   providers: [ArtistService]
 })
 export class ArtistComponent implements OnInit {
@@ -30,7 +25,8 @@ export class ArtistComponent implements OnInit {
     birthDate: new Date()
   };
 
-  constructor(private artistService: ArtistService) {}
+  constructor(private artistService: ArtistService) {
+  }
 
   ngOnInit(): void {
     this.loadArtists();

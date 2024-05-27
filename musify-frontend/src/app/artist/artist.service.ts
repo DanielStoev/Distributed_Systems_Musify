@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Artist } from '../model/artist.model';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {Artist} from '../model/artist.model';
 import {HttpClient} from "@angular/common/http";
 
 @Injectable({
@@ -9,7 +9,8 @@ import {HttpClient} from "@angular/common/http";
 export class ArtistService {
   private apiUrl = 'http://localhost:8080/api/artist';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   getAllArtists(): Observable<Artist[]> {
     return this.http.get<Artist[]>(this.apiUrl);

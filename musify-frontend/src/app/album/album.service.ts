@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Album } from '../model/album.model';
-import { HttpClient } from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {Album} from '../model/album.model';
+import {HttpClient} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +9,8 @@ import { HttpClient } from '@angular/common/http';
 export class AlbumService {
   private apiUrl = 'http://localhost:8080/api/albums';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   getAllAlbums(): Observable<Album[]> {
     return this.http.get<Album[]>(this.apiUrl);
