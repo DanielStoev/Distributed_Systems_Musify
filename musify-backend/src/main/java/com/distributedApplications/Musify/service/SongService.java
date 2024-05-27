@@ -44,6 +44,7 @@ public class SongService {
         Optional<Song> song = songRepository.findById(id);
         Song songEntity = new Song();
         if (song.isPresent()) {
+            songEntity.setId(songDTO.getId());
             songEntity.setTitle(songDTO.getTitle());
             songEntity.setDuration(songDTO.getDuration());
             songEntity.setGenre(songDTO.getGenre());

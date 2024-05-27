@@ -28,7 +28,7 @@ export class AlbumService {
   }
 
   updateAlbum(album: Album): Observable<Album> {
-    return this.http.put<Album>(`${this.apiUrl}`, album);
+    return this.http.put<Album>(`${this.apiUrl}/${album.id}`, album);
   }
 
   deleteAlbum(id: number): Observable<void> {
