@@ -15,7 +15,7 @@ public class Album {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(length = 50)
     private String title;
 
     @Column
