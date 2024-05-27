@@ -5,6 +5,8 @@ import { ArtistService } from '../artist/artist.service';
 import { Artist } from '../model/artist.model';
 import { AlbumService } from './album.service';
 import { Album } from '../model/album.model';
+import { SongService } from '../song/song.service';
+import { Song } from '../model/song.model';
 
 @Component({
   selector: 'app-album',
@@ -12,26 +14,27 @@ import { Album } from '../model/album.model';
   imports: [NgFor, NgIf, FormsModule],
   templateUrl: './album.component.html',
   styleUrls: ['./album.component.css'],
-  providers: [AlbumService, ArtistService]
+  providers: [AlbumService, ArtistService, SongService]
 })
 export class AlbumComponent implements OnInit {
   albums: Album[] = [];
   artists: Artist[] = [];
+  songs: Song[] = [];
   selectedAlbum: Album | null = null;
   newAlbum: Album = {
     id: 0,
     title: '',
-    numberOfSongs: 0,
     releaseDate: new Date(),
     artistId: 0,
     songIds: []
   };
 
-  constructor(private albumService: AlbumService, private artistService: ArtistService) {}
+  constructor(private albumService: AlbumService, private artistService: ArtistService, private songService: SongService) {}
 
   ngOnInit(): void {
     this.loadAlbums();
     this.loadArtists();
+    this.loadSongs();
   }
 
   loadAlbums(): void {
@@ -42,9 +45,17 @@ export class AlbumComponent implements OnInit {
     this.artistService.getAllArtists().subscribe((artists) => (this.artists = artists));
   }
 
+  loadSongs(): void {
+    this.songService.getAllSongs().subscribe((songs) => (this.songs = songs));
+  }
+
   getArtistName(artistId: number): string {
     const artist = this.artists.find(a => a.id === artistId);
     return artist ? artist.name : 'Unknown Artist';
+  }
+
+  getNumberOfSongs(albumId: number): number {
+    return this.songs.filter(song => song.albumId === albumId).length;
   }
 
   selectAlbum(album: Album): void {
@@ -74,7 +85,7 @@ export class AlbumComponent implements OnInit {
   addAlbum(): void {
     this.albumService.addAlbum(this.newAlbum).subscribe(() => {
       this.loadAlbums();
-      this.newAlbum = { id: 0, title: '', numberOfSongs: 0, releaseDate: new Date(), artistId: 0, songIds: [] };
+      this.newAlbum = { id: 0, title: '', releaseDate: new Date(), artistId: 0, songIds: [] };
     });
   }
 }

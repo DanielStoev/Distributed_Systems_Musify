@@ -1,3 +1,4 @@
+<!-- album.component.html -->
 <div class="container mt-5">
   <h1 class="mb-4">Albums</h1>
   <div class="row">
@@ -6,7 +7,7 @@
         <li *ngFor="let album of albums"
             class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
             (click)="selectAlbum(album)">
-          <span>{{ album.title }} ({{ getArtistName(album.artistId) }})</span>
+          <span>{{ album.title }} ({{ getArtistName(album.artistId) }}) - {{ getNumberOfSongs(album.id) }} songs</span>
           <button class="btn btn-info btn-sm">Edit</button>
         </li>
       </ul>
@@ -22,11 +23,6 @@
             <div class="form-group">
               <label for="title">Title</label>
               <input [(ngModel)]="selectedAlbum.title" name="title" id="title" class="form-control" required/>
-            </div>
-            <div class="form-group">
-              <label for="numberOfSongs">Number of Songs</label>
-              <input [(ngModel)]="selectedAlbum.numberOfSongs" type="number" name="numberOfSongs" id="numberOfSongs"
-                     class="form-control" required/>
             </div>
             <div class="form-group">
               <label for="releaseDate">Release Date</label>
@@ -55,11 +51,6 @@
             <div class="form-group">
               <label for="newTitle">Title</label>
               <input [(ngModel)]="newAlbum.title" name="title" id="newTitle" class="form-control" required/>
-            </div>
-            <div class="form-group">
-              <label for="newNumberOfSongs">Number of Songs</label>
-              <input [(ngModel)]="newAlbum.numberOfSongs" type="number" name="numberOfSongs" id="newNumberOfSongs"
-                     class="form-control" required/>
             </div>
             <div class="form-group">
               <label for="newReleaseDate">Release Date</label>
