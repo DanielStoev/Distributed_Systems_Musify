@@ -5,7 +5,7 @@ import com.distributedApplications.Musify.entity.Artist;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ArtistConverter {
+public class ArtistMapper {
 
     public ArtistDTO convertToDTO(Artist artist) {
         ArtistDTO artistDTO = new ArtistDTO();

@@ -1,6 +1,6 @@
 package com.distributedApplications.Musify.service;
 
-import com.distributedApplications.Musify.converter.SongConverter;
+import com.distributedApplications.Musify.converter.SongMapper;
 import com.distributedApplications.Musify.dto.SongDTO;
 import com.distributedApplications.Musify.entity.Song;
 import com.distributedApplications.Musify.repository.AlbumRepository;
@@ -26,18 +26,18 @@ public class SongService {
     private ArtistRepository artistRepository;
 
     @Autowired
-    private SongConverter songConverter;
+    private SongMapper songMapper;
 
     public List<SongDTO> getAllSongs() {
         return songRepository.findAll().stream()
-                .map(songConverter::convertToDTO)
+                .map(songMapper::convertToDTO)
                 .collect(Collectors.toList());
     }
 
     public SongDTO createSong(SongDTO songDTO) {
-        Song song = songConverter.convertToEntity(songDTO);
+        Song song = songMapper.convertToEntity(songDTO);
         song = songRepository.save(song);
-        return songConverter.convertToDTO(song);
+        return songMapper.convertToDTO(song);
     }
 
     public SongDTO updateSong(Long id, SongDTO songDTO) {
@@ -53,7 +53,7 @@ public class SongService {
             songEntity = songRepository.save(songEntity);
         }
 
-        return songConverter.convertToDTO(songEntity);
+        return songMapper.convertToDTO(songEntity);
     }
 
     public void deleteSong(Long id) {
