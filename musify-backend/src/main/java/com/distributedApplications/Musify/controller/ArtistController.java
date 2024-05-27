@@ -1,46 +1,40 @@
 package com.distributedApplications.Musify.controller;
 
-import com.distributedApplications.Musify.entity.Artist;
+import com.distributedApplications.Musify.dto.ArtistDTO;
 import com.distributedApplications.Musify.service.ArtistService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/artists")
-@CrossOrigin(origins = "http://localhost:4200")
+@RequestMapping("/artists")
 public class ArtistController {
+
     @Autowired
     private ArtistService artistService;
 
     @GetMapping
-    public List<Artist> getAllArtists() {
-       return artistService.getAllArtists();
-    }
-
-    @GetMapping("/{id}")
-    public Artist getArtistById(@PathVariable int id) {
-        return artistService.getArtistById(id);
-    }
-
-    @GetMapping("/{name}")
-    public Artist getArtistByName(@PathVariable String name) {
-        return artistService.getByName(name);
+    public List<ArtistDTO> getAllArtists() {
+        return artistService.getAllArtists();
     }
 
     @PostMapping
-    public void addArtist(@RequestBody Artist artist) {
-        artistService.createArtist(artist);
+    public ResponseEntity<ArtistDTO> createArtist(@RequestBody ArtistDTO artistDTO) {
+        ArtistDTO createdArtist = artistService.createArtist(artistDTO);
+        return ResponseEntity.ok(createdArtist);
     }
 
-    @PutMapping
-    public void updateArtist(@RequestBody Artist artist) {
-        artistService.updateArtist(artist);
+    @PutMapping("/{id}")
+    public ResponseEntity<ArtistDTO> updateArtist(@PathVariable Long id, @RequestBody ArtistDTO artistDTO) {
+        ArtistDTO updatedArtist = artistService.updateArtist(id, artistDTO);
+        return ResponseEntity.ok(updatedArtist);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteArtist(@PathVariable int id) {
+    public ResponseEntity<Void> deleteArtist(@PathVariable Long id) {
         artistService.deleteArtist(id);
+        return ResponseEntity.noContent().build();
     }
 }

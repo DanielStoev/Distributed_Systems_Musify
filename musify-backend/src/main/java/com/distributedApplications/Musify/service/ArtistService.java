@@ -1,55 +1,52 @@
 package com.distributedApplications.Musify.service;
 
+import com.distributedApplications.Musify.converter.ArtistConverter;
+import com.distributedApplications.Musify.dto.ArtistDTO;
 import com.distributedApplications.Musify.entity.Artist;
 import com.distributedApplications.Musify.repository.ArtistRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ArtistService {
+
     @Autowired
     private ArtistRepository artistRepository;
 
-    public List<Artist> getAllArtists() {
-        return artistRepository.findAll();
+    @Autowired
+    private ArtistConverter artistConverter;
+
+    public List<ArtistDTO> getAllArtists() {
+        return artistRepository.findAll().stream()
+                .map(artistConverter::convertToDTO)
+                .collect(Collectors.toList());
     }
 
-    public Artist getArtistById(int id) {
-        return artistRepository.findById(id);
+    public ArtistDTO createArtist(ArtistDTO artistDTO) {
+        Artist artist = artistConverter.convertToEntity(artistDTO);
+        artist = artistRepository.save(artist);
+        return artistConverter.convertToDTO(artist);
     }
 
-    public Artist getByName(String name) {
-        return artistRepository.findByName(name);
+    public ArtistDTO updateArtist(Long id, ArtistDTO artistDTO) {
+        Optional<Artist> artist = artistRepository.findById(id);
+        Artist artistEntity = new Artist();
+
+        if (artist.isPresent()) {
+            artistEntity.setName(artistDTO.getName());
+            artistEntity.setCountry(artistDTO.getCountry());
+            artistEntity.setBirthDate(artistDTO.getBirthDate());
+            artistEntity = artistRepository.save(artistEntity);
+        }
+
+        return artistConverter.convertToDTO(artistEntity);
     }
 
-    @Transactional
-    public void createArtist(Artist artist) {
-        artistRepository.save(artist);
-    }
-
-    @Transactional
-    public void updateArtist(Artist artistDetails) {
-        Artist artist = getArtistById(artistDetails.getId());
-        artist.setName(artistDetails.getName());
-        artist.setCountry(artistDetails.getCountry());
-        artist.setBirthDate(artistDetails.getBirthDate());
-        updateArtistCollections(artist, artistDetails);
-        artistRepository.save(artist);
-    }
-
-    @Transactional
-    public void deleteArtist(int id) {
-        Artist artist = getArtistById(id);
-        artistRepository.delete(artist);
-    }
-
-    private void updateArtistCollections(Artist artist, Artist artistDetails) {
-        artist.getSongs().clear();
-        artist.getSongs().addAll(artistDetails.getSongs());
-        artist.getAlbums().clear();
-        artist.getAlbums().addAll(artistDetails.getAlbums());
+    public void deleteArtist(Long id) {
+        artistRepository.deleteById(id);
     }
 }
