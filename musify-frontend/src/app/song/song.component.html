@@ -1,9 +1,12 @@
+<!-- song.component.html -->
 <div class="container mt-5">
   <h1 class="mb-4">Songs</h1>
   <div class="row">
     <div class="col-md-4">
       <ul class="list-group">
-        <li *ngFor="let song of songs" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" (click)="selectSong(song)">
+        <li *ngFor="let song of songs"
+            class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+            (click)="selectSong(song)">
           <span>{{ song.title }} ({{ getArtistName(song.artistId) }} - {{ getAlbumTitle(song.albumId) }})</span>
           <button class="btn btn-info btn-sm">Edit</button>
         </li>
@@ -19,19 +22,20 @@
             <input type="hidden" [(ngModel)]="selectedSong.id" name="id">
             <div class="form-group">
               <label for="title">Title</label>
-              <input [(ngModel)]="selectedSong.title" name="title" id="title" class="form-control" required />
+              <input [(ngModel)]="selectedSong.title" name="title" id="title" class="form-control" required/>
             </div>
             <div class="form-group">
               <label for="duration">Duration</label>
-              <input [(ngModel)]="selectedSong.duration" type="number" name="duration" id="duration" class="form-control" required />
+              <input [(ngModel)]="selectedSong.duration" type="number" name="duration" id="duration" class="form-control" required/>
             </div>
             <div class="form-group">
               <label for="genre">Genre</label>
-              <input [(ngModel)]="selectedSong.genre" name="genre" id="genre" class="form-control" required />
+              <input [(ngModel)]="selectedSong.genre" name="genre" id="genre" class="form-control" required/>
             </div>
             <div class="form-group">
               <label for="releaseDate">Release Date</label>
-              <input [(ngModel)]="selectedSong.releaseDate" type="date" name="releaseDate" id="releaseDate" class="form-control" required />
+              <input [(ngModel)]="selectedSong.releaseDate" type="date" name="releaseDate" id="releaseDate"
+                     class="form-control" required/>
             </div>
             <div class="form-group">
               <label for="artist">Artist</label>
@@ -47,11 +51,12 @@
             </div>
             <button type="submit" class="btn btn-primary" [disabled]="!editForm.form.valid">Update</button>
             <button type="button" class="btn btn-danger ml-2" (click)="deleteSong(selectedSong.id)">Delete</button>
+            <button type="button" class="btn btn-secondary ml-2" (click)="cancelEdit()">Cancel</button>
           </form>
         </div>
       </div>
 
-      <div class="card">
+      <div *ngIf="!selectedSong" class="card">
         <div class="card-header">
           <h2 class="card-title">Add New Song</h2>
         </div>
@@ -59,19 +64,20 @@
           <form #addForm="ngForm" (ngSubmit)="addSong()">
             <div class="form-group">
               <label for="newTitle">Title</label>
-              <input [(ngModel)]="newSong.title" name="title" id="newTitle" class="form-control" required />
+              <input [(ngModel)]="newSong.title" name="title" id="newTitle" class="form-control" required/>
             </div>
             <div class="form-group">
               <label for="newDuration">Duration</label>
-              <input [(ngModel)]="newSong.duration" type="number" name="duration" id="newDuration" class="form-control" required />
+              <input [(ngModel)]="newSong.duration" type="number" name="duration" id="newDuration" class="form-control" required/>
             </div>
             <div class="form-group">
               <label for="newGenre">Genre</label>
-              <input [(ngModel)]="newSong.genre" name="genre" id="newGenre" class="form-control" required />
+              <input [(ngModel)]="newSong.genre" name="genre" id="newGenre" class="form-control" required/>
             </div>
             <div class="form-group">
               <label for="newReleaseDate">Release Date</label>
-              <input [(ngModel)]="newSong.releaseDate" type="date" name="releaseDate" id="newReleaseDate" class="form-control" required />
+              <input [(ngModel)]="newSong.releaseDate" type="date" name="releaseDate" id="newReleaseDate"
+                     class="form-control" required/>
             </div>
             <div class="form-group">
               <label for="newArtist">Artist</label>

@@ -57,6 +57,10 @@ export class SongComponent implements OnInit {
     this.selectedSong = song;
   }
 
+  cancelEdit(): void {
+    this.selectedSong = null;
+  }
+
   updateSong(): void {
     if (this.selectedSong && this.selectedSong.id) {
       this.songService.updateSong(this.selectedSong).subscribe(() => {

@@ -1,10 +1,10 @@
-import {Component, OnInit} from '@angular/core';
-import {NgFor, NgIf} from '@angular/common';
-import {FormsModule} from '@angular/forms';
-import {ArtistService} from '../artist/artist.service';
-import {Artist} from '../model/artist.model';
-import {AlbumService} from './album.service';
-import {Album} from '../model/album.model';
+import { Component, OnInit } from '@angular/core';
+import { NgFor, NgIf } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { ArtistService } from '../artist/artist.service';
+import { Artist } from '../model/artist.model';
+import { AlbumService } from './album.service';
+import { Album } from '../model/album.model';
 
 @Component({
   selector: 'app-album',
@@ -27,8 +27,7 @@ export class AlbumComponent implements OnInit {
     songIds: []
   };
 
-  constructor(private albumService: AlbumService, private artistService: ArtistService) {
-  }
+  constructor(private albumService: AlbumService, private artistService: ArtistService) {}
 
   ngOnInit(): void {
     this.loadAlbums();
@@ -52,6 +51,10 @@ export class AlbumComponent implements OnInit {
     this.selectedAlbum = album;
   }
 
+  cancelEdit(): void {
+    this.selectedAlbum = null;
+  }
+
   updateAlbum(): void {
     if (this.selectedAlbum && this.selectedAlbum.id) {
       this.albumService.updateAlbum(this.selectedAlbum).subscribe(() => {
@@ -71,7 +74,7 @@ export class AlbumComponent implements OnInit {
   addAlbum(): void {
     this.albumService.addAlbum(this.newAlbum).subscribe(() => {
       this.loadAlbums();
-      this.newAlbum = {id: 0, title: '', numberOfSongs: 0, releaseDate: new Date(), artistId: 0, songIds: []};
+      this.newAlbum = { id: 0, title: '', numberOfSongs: 0, releaseDate: new Date(), artistId: 0, songIds: [] };
     });
   }
 }

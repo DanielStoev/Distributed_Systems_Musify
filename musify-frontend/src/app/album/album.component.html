@@ -41,11 +41,12 @@
             </div>
             <button type="submit" class="btn btn-primary" [disabled]="!editForm.form.valid">Update</button>
             <button type="button" class="btn btn-danger ml-2" (click)="deleteAlbum(selectedAlbum.id)">Delete</button>
+            <button type="button" class="btn btn-secondary ml-2" (click)="cancelEdit()">Cancel</button>
           </form>
         </div>
       </div>
 
-      <div class="card">
+      <div *ngIf="!selectedAlbum" class="card">
         <div class="card-header">
           <h2 class="card-title">Add New Album</h2>
         </div>

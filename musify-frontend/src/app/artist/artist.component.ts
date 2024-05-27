@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {NgFor, NgIf} from '@angular/common';
-import {FormsModule} from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
-import {ArtistService} from './artist.service';
-import {Artist} from '../model/artist.model';
+import { Component, OnInit } from '@angular/core';
+import { NgFor, NgIf } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { ArtistService } from './artist.service';
+import { Artist } from '../model/artist.model';
 
 @Component({
   selector: 'app-artist',
@@ -25,8 +25,7 @@ export class ArtistComponent implements OnInit {
     birthDate: new Date()
   };
 
-  constructor(private artistService: ArtistService) {
-  }
+  constructor(private artistService: ArtistService) {}
 
   ngOnInit(): void {
     this.loadArtists();
@@ -42,6 +41,10 @@ export class ArtistComponent implements OnInit {
 
   selectArtist(artist: Artist): void {
     this.selectedArtist = artist;
+  }
+
+  cancelEdit(): void {
+    this.selectedArtist = null;
   }
 
   addArtist(): void {
@@ -65,6 +68,7 @@ export class ArtistComponent implements OnInit {
       this.artistService.updateArtist(this.selectedArtist).subscribe({
         next: () => {
           this.loadArtists();
+          this.selectedArtist = null;
         }
       });
     }
