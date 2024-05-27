@@ -1,126 +1,82 @@
 import { Component, OnInit } from '@angular/core';
+import { NgFor, NgIf } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { SongService } from './song.service';
-import { Song } from '../model/song.model';
-import { Artist } from '../model/artist.model';
-import { Album } from '../model/album.model';
-import { ArtistService } from '../artist/artist.service';
 import { AlbumService } from '../album/album.service';
-import { NgForOf, NgIf } from "@angular/common";
-import { FormsModule } from "@angular/forms";
-import { HttpClientModule } from '@angular/common/http';
+import { ArtistService } from '../artist/artist.service';
+import { Song } from '../model/song.model';
+import { Album } from '../model/album.model';
+import { Artist } from '../model/artist.model';
 
 @Component({
   selector: 'app-song',
   standalone: true,
+  imports: [NgFor, NgIf, FormsModule],
   templateUrl: './song.component.html',
-  imports: [
-    NgIf,
-    NgForOf,
-    FormsModule,
-    HttpClientModule
-  ],
-  styleUrl: './song.component.css',
-  providers: [SongService, ArtistService, AlbumService]
+  styleUrls: ['./song.component.css'],
+  providers: [SongService, AlbumService, ArtistService]
 })
 export class SongComponent implements OnInit {
   songs: Song[] = [];
-  artists: Artist[] = [];
   albums: Album[] = [];
+  artists: Artist[] = [];
   selectedSong: Song | null = null;
-  newSong: Song = {
-    id: 0,
-    title: '',
-    duration: 0,
-    albumId: -1,
-    artistId: -1,
-    genre: '',
-    releaseDate: new Date()
-  };
+  newSong: Song = { id: 0, title: '', duration: 0, genre: '', releaseDate: new Date(), artistId: 0, albumId: 0 };
 
-  constructor(
-    private songService: SongService,
-    private artistService: ArtistService,
-    private albumService: AlbumService
-  ) {}
+  constructor(private songService: SongService, private albumService: AlbumService, private artistService: ArtistService) {}
 
   ngOnInit(): void {
     this.loadSongs();
-    this.loadArtists();
     this.loadAlbums();
+    this.loadArtists();
   }
 
   loadSongs(): void {
-    this.songService.getAllSongs().subscribe({
-      next: (data) => {
-        this.songs = data;
-      }
-    });
-  }
-
-  loadArtists(): void {
-    this.artistService.getAllArtists().subscribe({
-      next: (data) => {
-        this.artists = data;
-      }
-    });
+    this.songService.getAllSongs().subscribe((songs) => (this.songs = songs));
   }
 
   loadAlbums(): void {
-    this.albumService.getAllAlbums().subscribe({
-      next: (data) => {
-        this.albums = data;
-      }
-    });
+    this.albumService.getAllAlbums().subscribe((albums) => (this.albums = albums));
+  }
+
+  loadArtists(): void {
+    this.artistService.getAllArtists().subscribe((artists) => (this.artists = artists));
+  }
+
+  getArtistName(artistId: number): string {
+    const artist = this.artists.find(a => a.id === artistId);
+    return artist ? artist.name : 'Unknown Artist';
+  }
+
+  getAlbumTitle(albumId: number): string {
+    const album = this.albums.find(a => a.id === albumId);
+    return album ? album.title : 'Unknown Album';
   }
 
   selectSong(song: Song): void {
     this.selectedSong = song;
   }
 
-  addSong(): void {
-    const selectedArtist = this.artists.find(artist => artist.id === this.newSong.artistId);
-    const selectedAlbum = this.albums.find(album => album.id === this.newSong.albumId);
-
-    if (selectedArtist) {
-      this.newSong.artistId = selectedArtist.id;
-    }
-
-    if (selectedAlbum) {
-      this.newSong.albumId = selectedAlbum.id;
-    }
-
-    this.songService.addSong(this.newSong).subscribe({
-      next: () => {
-        this.loadSongs();
-        this.newSong = {
-          id: 0,
-          title: '',
-          duration: 0,
-          albumId: -1,
-          artistId: -1,
-          genre: '',
-          releaseDate: new Date()
-        };
-      }
-    });
-  }
-
   updateSong(): void {
-    if (this.selectedSong) {
-      this.songService.updateSong(this.selectedSong).subscribe({
-        next: () => {
-          this.loadSongs();
-        }
+    if (this.selectedSong && this.selectedSong.id) {
+      this.songService.updateSong(this.selectedSong).subscribe(() => {
+        this.loadSongs();
+        this.selectedSong = null;
       });
     }
   }
 
   deleteSong(id: number): void {
-    this.songService.deleteSong(id).subscribe({
-      next: () => {
-        this.loadSongs();
-        this.selectedSong = null;
-      }
+    this.songService.deleteSong(id).subscribe(() => {
+      this.loadSongs();
+      this.selectedSong = null;
+    });
+  }
+
+  addSong(): void {
+    this.songService.addSong(this.newSong).subscribe(() => {
+      this.loadSongs();
+      this.newSong = { id: 0, title: '', duration: 0, genre: '', releaseDate: new Date(), artistId: 0, albumId: 0 };
     });
   }
 }

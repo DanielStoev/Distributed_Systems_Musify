@@ -1,41 +1,94 @@
-<div>
-  <h1>Songs</h1>
-  <ul>
-    <li *ngFor="let song of songs" (click)="selectSong(song)">
-      {{ song.title }} ({{ song.artistId }} - {{ song.albumId }})
-    </li>
-  </ul>
+<div class="container mt-5">
+  <h1 class="mb-4">Songs</h1>
+  <div class="row">
+    <div class="col-md-4">
+      <ul class="list-group">
+        <li *ngFor="let song of songs" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" (click)="selectSong(song)">
+          <span>{{ song.title }} ({{ getArtistName(song.artistId) }} - {{ getAlbumTitle(song.albumId) }})</span>
+          <button class="btn btn-info btn-sm">Edit</button>
+        </li>
+      </ul>
+    </div>
+    <div class="col-md-8">
+      <div *ngIf="selectedSong" class="card mb-4">
+        <div class="card-header">
+          <h2 class="card-title">Edit Song</h2>
+        </div>
+        <div class="card-body">
+          <form #editForm="ngForm" (ngSubmit)="updateSong()">
+            <input type="hidden" [(ngModel)]="selectedSong.id" name="id">
+            <div class="form-group">
+              <label for="title">Title</label>
+              <input [(ngModel)]="selectedSong.title" name="title" id="title" class="form-control" required />
+            </div>
+            <div class="form-group">
+              <label for="duration">Duration</label>
+              <input [(ngModel)]="selectedSong.duration" type="number" name="duration" id="duration" class="form-control" required />
+            </div>
+            <div class="form-group">
+              <label for="genre">Genre</label>
+              <input [(ngModel)]="selectedSong.genre" name="genre" id="genre" class="form-control" required />
+            </div>
+            <div class="form-group">
+              <label for="releaseDate">Release Date</label>
+              <input [(ngModel)]="selectedSong.releaseDate" type="date" name="releaseDate" id="releaseDate" class="form-control" required />
+            </div>
+            <div class="form-group">
+              <label for="artist">Artist</label>
+              <select [(ngModel)]="selectedSong.artistId" name="artist" id="artist" class="form-control" required>
+                <option *ngFor="let artist of artists" [value]="artist.id">{{ artist.name }}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="album">Album</label>
+              <select [(ngModel)]="selectedSong.albumId" name="album" id="album" class="form-control" required>
+                <option *ngFor="let album of albums" [value]="album.id">{{ album.title }}</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary" [disabled]="!editForm.form.valid">Update</button>
+            <button type="button" class="btn btn-danger ml-2" (click)="deleteSong(selectedSong.id)">Delete</button>
+          </form>
+        </div>
+      </div>
 
-  <div *ngIf="selectedSong">
-    <h2>Edit Song</h2>
-    <form #editForm="ngForm" (ngSubmit)="updateSong()">
-      <label>Title: <input [(ngModel)]="selectedSong.title" name="title" required /></label>
-      <label>Duration: <input [(ngModel)]="selectedSong.duration" type="number" name="duration" required /></label>
-      <label>Genre: <input [(ngModel)]="selectedSong.genre" name="genre" required /></label>
-      <label>Release Date: <input [(ngModel)]="selectedSong.releaseDate" type="date" name="releaseDate" required /></label>
-      <button type="submit" [disabled]="!editForm.form.valid">Update</button>
-      <button type="button" (click)="deleteSong(selectedSong.id)">Delete</button>
-    </form>
-  </div>
-
-  <div>
-    <h2>Add New Song</h2>
-    <form #addForm="ngForm" (ngSubmit)="addSong()">
-      <label>Title: <input [(ngModel)]="newSong.title" name="title" required /></label>
-      <label>Duration: <input [(ngModel)]="newSong.duration" type="number" name="duration" required /></label>
-      <label>Genre: <input [(ngModel)]="newSong.genre" name="genre" required /></label>
-      <label>Release Date: <input [(ngModel)]="newSong.releaseDate" type="date" name="releaseDate" required /></label>
-      <label>Artist:
-        <select [(ngModel)]="newSong.artistId" name="artist" required>
-          <option *ngFor="let artist of artists" [value]="artist.id">{{ artist.name }}</option>
-        </select>
-      </label>
-      <label>Album:
-        <select [(ngModel)]="newSong.albumId" name="album" required>
-          <option *ngFor="let album of albums" [value]="album.id">{{ album.title }}</option>
-        </select>
-      </label>
-      <button type="submit" [disabled]="!addForm.form.valid">Add</button>
-    </form>
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Add New Song</h2>
+        </div>
+        <div class="card-body">
+          <form #addForm="ngForm" (ngSubmit)="addSong()">
+            <div class="form-group">
+              <label for="newTitle">Title</label>
+              <input [(ngModel)]="newSong.title" name="title" id="newTitle" class="form-control" required />
+            </div>
+            <div class="form-group">
+              <label for="newDuration">Duration</label>
+              <input [(ngModel)]="newSong.duration" type="number" name="duration" id="newDuration" class="form-control" required />
+            </div>
+            <div class="form-group">
+              <label for="newGenre">Genre</label>
+              <input [(ngModel)]="newSong.genre" name="genre" id="newGenre" class="form-control" required />
+            </div>
+            <div class="form-group">
+              <label for="newReleaseDate">Release Date</label>
+              <input [(ngModel)]="newSong.releaseDate" type="date" name="releaseDate" id="newReleaseDate" class="form-control" required />
+            </div>
+            <div class="form-group">
+              <label for="newArtist">Artist</label>
+              <select [(ngModel)]="newSong.artistId" name="artist" id="newArtist" class="form-control" required>
+                <option *ngFor="let artist of artists" [value]="artist.id">{{ artist.name }}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="newAlbum">Album</label>
+              <select [(ngModel)]="newSong.albumId" name="album" id="newAlbum" class="form-control" required>
+                <option *ngFor="let album of albums" [value]="album.id">{{ album.title }}</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-success" [disabled]="!addForm.form.valid">Add</button>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
