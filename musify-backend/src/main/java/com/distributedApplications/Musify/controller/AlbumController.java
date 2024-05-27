@@ -1,46 +1,40 @@
 package com.distributedApplications.Musify.controller;
 
-import com.distributedApplications.Musify.entity.Album;
+import com.distributedApplications.Musify.dto.AlbumDTO;
 import com.distributedApplications.Musify.service.AlbumService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/albums")
-@CrossOrigin(origins = "http://localhost:4200")
+@RequestMapping("/albums")
 public class AlbumController {
+
     @Autowired
     private AlbumService albumService;
 
     @GetMapping
-    public List<Album> getAllAlbums() {
+    public List<AlbumDTO> getAllAlbums() {
         return albumService.getAllAlbums();
     }
 
-    @GetMapping("/{id}")
-    public Album getAlbumById(@PathVariable int id) {
-        return albumService.getAlbumById(id);
-    }
-
-    @GetMapping("/{title}")
-    public Album getAlbumsByTitle(@PathVariable String title) {
-        return albumService.getAlbumByTitle(title);
-    }
-
     @PostMapping
-    public void addAlbum(@RequestBody Album album) {
-        albumService.createAlbum(album);
+    public ResponseEntity<AlbumDTO> createAlbum(@RequestBody AlbumDTO albumDTO) {
+        AlbumDTO createdAlbum = albumService.createAlbum(albumDTO);
+        return ResponseEntity.ok(createdAlbum);
     }
 
-    @PutMapping
-    public void updateAlbum(@RequestBody Album album) {
-        albumService.updateAlbum(album);
+    @PutMapping("/{id}")
+    public ResponseEntity<AlbumDTO> updateAlbum(@PathVariable Long id, @RequestBody AlbumDTO albumDTO) {
+        AlbumDTO updatedAlbum = albumService.updateAlbum(id, albumDTO);
+        return ResponseEntity.ok(updatedAlbum);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteAlbum(@PathVariable int id) {
+    public ResponseEntity<Void> deleteAlbum(@PathVariable Long id) {
         albumService.deleteAlbum(id);
+        return ResponseEntity.noContent().build();
     }
 }
