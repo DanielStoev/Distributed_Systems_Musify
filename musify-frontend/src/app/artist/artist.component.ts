@@ -24,8 +24,8 @@ export class ArtistComponent implements OnInit {
   newArtist: Artist = {
     id: 0,
     name: '',
-    songs: [],
-    albums: [],
+    songIds: [],
+    albumIds: [],
     country: '',
     birthDate: new Date()
   };
@@ -55,8 +55,8 @@ export class ArtistComponent implements OnInit {
         this.newArtist = {
           id: 0,
           name: '',
-          songs: [],
-          albums: [],
+          songIds: [],
+          albumIds: [],
           country: '',
           birthDate: new Date()
         };

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/albums")
+@RequestMapping("/api/albums")
 public class AlbumController {
 
     @Autowired

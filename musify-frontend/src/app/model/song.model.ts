@@ -1,12 +1,9 @@
-import { Artist } from './artist.model';
-import {Album} from "./album.model";
-
 export interface Song {
   id: number;
   title: string;
   duration: number;
-  artist: Artist;
-  album: Album;
+  artistId: number;
+  albumId: number;
   genre: string;
   releaseDate: Date;
 }

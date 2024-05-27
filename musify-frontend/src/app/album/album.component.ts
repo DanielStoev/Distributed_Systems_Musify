@@ -29,8 +29,8 @@ export class AlbumComponent implements OnInit {
     title: '',
     numberOfSongs: 0,
     releaseDate: new Date(),
-    artist: { id: 0, name: '', country: '', birthDate: new Date(), songs: [], albums: [] },
-    songs: []
+    artistId: 0,
+    songIds: []
   };
 
   constructor(private albumService: AlbumService, private artistService: ArtistService) {}
@@ -61,10 +61,10 @@ export class AlbumComponent implements OnInit {
   }
 
   addAlbum(): void {
-    const selectedArtist = this.artists.find(artist => artist.id === this.newAlbum.artist.id);
+    const selectedArtist = this.artists.find(artist => artist.id === this.newAlbum.artistId);
 
     if (selectedArtist) {
-      this.newAlbum.artist = selectedArtist;
+      this.newAlbum.artistId = selectedArtist.id;
     }
 
     this.albumService.addAlbum(this.newAlbum).subscribe({
@@ -75,8 +75,8 @@ export class AlbumComponent implements OnInit {
           title: '',
           numberOfSongs: 0,
           releaseDate: new Date(),
-          artist: { id: 0, name: '', country: '', birthDate: new Date(), songs: [], albums: [] },
-          songs: []
+          artistId: 0,
+          songIds: []
         };
       }
     });

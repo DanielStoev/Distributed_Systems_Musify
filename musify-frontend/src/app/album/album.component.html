@@ -2,7 +2,7 @@
   <h1>Albums</h1>
   <ul>
     <li *ngFor="let album of albums" (click)="selectAlbum(album)">
-      {{ album.title }} ({{ album.artist.name }})
+      {{ album.title }} ({{ album.artistId }})
     </li>
   </ul>
 
@@ -13,7 +13,7 @@
       <label>Number of Songs: <input [(ngModel)]="selectedAlbum.numberOfSongs" type="number" name="numberOfSongs" required /></label>
       <label>Release Date: <input [(ngModel)]="selectedAlbum.releaseDate" type="date" name="releaseDate" required /></label>
       <label>Artist:
-        <select [(ngModel)]="selectedAlbum.artist.id" name="artist" required>
+        <select [(ngModel)]="selectedAlbum.artistId" name="artist" required>
           <option *ngFor="let artist of artists" [value]="artist.id">{{ artist.name }}</option>
         </select>
       </label>
@@ -29,7 +29,7 @@
       <label>Number of Songs: <input [(ngModel)]="newAlbum.numberOfSongs" type="number" name="numberOfSongs" required /></label>
       <label>Release Date: <input [(ngModel)]="newAlbum.releaseDate" type="date" name="releaseDate" required /></label>
       <label>Artist:
-        <select [(ngModel)]="newAlbum.artist.id" name="artist" required>
+        <select [(ngModel)]="newAlbum.artistId" name="artist" required>
           <option *ngFor="let artist of artists" [value]="artist.id">{{ artist.name }}</option>
         </select>
       </label>

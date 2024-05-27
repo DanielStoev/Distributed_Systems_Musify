@@ -31,8 +31,8 @@ export class SongComponent implements OnInit {
     id: 0,
     title: '',
     duration: 0,
-    album: { id: 0, title: '', numberOfSongs: 0, releaseDate: new Date(), artist: { id: 0, name: '', country: '', birthDate: new Date(), songs: [], albums: [] }, songs: [] },
-    artist: { id: 0, name: '', country: '', birthDate: new Date(), songs: [], albums: [] },
+    albumId: -1,
+    artistId: -1,
     genre: '',
     releaseDate: new Date()
   };
@@ -78,15 +78,15 @@ export class SongComponent implements OnInit {
   }
 
   addSong(): void {
-    const selectedArtist = this.artists.find(artist => artist.id === this.newSong.artist.id);
-    const selectedAlbum = this.albums.find(album => album.id === this.newSong.album.id);
+    const selectedArtist = this.artists.find(artist => artist.id === this.newSong.artistId);
+    const selectedAlbum = this.albums.find(album => album.id === this.newSong.albumId);
 
     if (selectedArtist) {
-      this.newSong.artist = selectedArtist;
+      this.newSong.artistId = selectedArtist.id;
     }
 
     if (selectedAlbum) {
-      this.newSong.album = selectedAlbum;
+      this.newSong.albumId = selectedAlbum.id;
     }
 
     this.songService.addSong(this.newSong).subscribe({
@@ -96,8 +96,8 @@ export class SongComponent implements OnInit {
           id: 0,
           title: '',
           duration: 0,
-          album: { id: 0, title: '', numberOfSongs: 0, releaseDate: new Date(), artist: { id: 0, name: '', country: '', birthDate: new Date(), songs: [], albums: [] }, songs: [] },
-          artist: { id: 0, name: '', country: '', birthDate: new Date(), songs: [], albums: [] },
+          albumId: -1,
+          artistId: -1,
           genre: '',
           releaseDate: new Date()
         };

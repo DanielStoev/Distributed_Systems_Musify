@@ -7,7 +7,7 @@ import {HttpClient} from "@angular/common/http";
   providedIn: 'root'
 })
 export class ArtistService {
-  private apiUrl = 'http://localhost:8080/api/artists';
+  private apiUrl = 'http://localhost:8080/api/artist';
 
   constructor(private http: HttpClient) {}
 
