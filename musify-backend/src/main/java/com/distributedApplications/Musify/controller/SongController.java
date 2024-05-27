@@ -1,46 +1,40 @@
 package com.distributedApplications.Musify.controller;
 
-import com.distributedApplications.Musify.entity.Song;
+import com.distributedApplications.Musify.dto.SongDTO;
 import com.distributedApplications.Musify.service.SongService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/songs")
-@CrossOrigin(origins = "http://localhost:4200")
+@RequestMapping("/songs")
 public class SongController {
+
     @Autowired
     private SongService songService;
 
     @GetMapping
-    public List<Song> getAllSongs() {
+    public List<SongDTO> getAllSongs() {
         return songService.getAllSongs();
     }
 
-    @GetMapping("/{id}")
-    public Song getSongById(@PathVariable int id) {
-        return songService.getSongById(id);
-    }
-
-    @GetMapping("/{title}")
-    public Song getSongsByTitle(@PathVariable String title) {
-        return songService.getSongByTitle(title);
-    }
-
     @PostMapping
-    public void addSong(@RequestBody Song song) {
-        songService.createSong(song);
+    public ResponseEntity<SongDTO> createSong(@RequestBody SongDTO songDTO) {
+        SongDTO createdSong = songService.createSong(songDTO);
+        return ResponseEntity.ok(createdSong);
     }
 
-    @PutMapping
-    public void updateSong(@RequestBody Song song) {
-        songService.updateSong(song);
+    @PutMapping("/{id}")
+    public ResponseEntity<SongDTO> updateSong(@PathVariable Long id, @RequestBody SongDTO songDTO) {
+        SongDTO updatedSong = songService.updateSong(id, songDTO);
+        return ResponseEntity.ok(updatedSong);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteSong(@PathVariable int id) {
+    public ResponseEntity<Void> deleteSong(@PathVariable Long id) {
         songService.deleteSong(id);
+        return ResponseEntity.noContent().build();
     }
 }
