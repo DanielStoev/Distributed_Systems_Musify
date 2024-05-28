@@ -22,6 +22,9 @@ export class SongComponent implements OnInit {
   artists: Artist[] = [];
   selectedSong: Song | null = null;
   newSong: Song = { id: 0, title: '', duration: 0, genre: '', releaseDate: new Date(), artistId: 0, albumId: 0 };
+  page: number = 0;
+  size: number = 5;
+  totalPages: number = 0;
 
   constructor(private songService: SongService, private albumService: AlbumService, private artistService: ArtistService) {}
 
@@ -32,15 +35,28 @@ export class SongComponent implements OnInit {
   }
 
   loadSongs(): void {
-    this.songService.getAllSongs().subscribe((songs) => (this.songs = songs));
+    this.songService.getAllSongs(this.page, this.size).subscribe(response => {
+      if (response && Array.isArray(response.content)) {
+        this.songs = response.content;
+        this.totalPages = response.totalPages;
+      }
+    });
   }
 
   loadAlbums(): void {
-    this.albumService.getAllAlbums().subscribe((albums) => (this.albums = albums));
+    this.albumService.getAllAlbums(0, 100).subscribe(response => {
+      if (response && Array.isArray(response.content)) {
+        this.albums = response.content;
+      }
+    });
   }
 
   loadArtists(): void {
-    this.artistService.getAllArtists().subscribe((artists) => (this.artists = artists));
+    this.artistService.getAllArtists(0, 100).subscribe(response => {
+      if (response && Array.isArray(response.content)) {
+        this.artists = response.content;
+      }
+    });
   }
 
   getArtistName(artistId: number): string {
@@ -82,5 +98,12 @@ export class SongComponent implements OnInit {
       this.loadSongs();
       this.newSong = { id: 0, title: '', duration: 0, genre: '', releaseDate: new Date(), artistId: 0, albumId: 0 };
     });
+  }
+
+  goToPage(page: number): void {
+    if (page >= 0 && page < this.totalPages) {
+      this.page = page;
+      this.loadSongs();
+    }
   }
 }

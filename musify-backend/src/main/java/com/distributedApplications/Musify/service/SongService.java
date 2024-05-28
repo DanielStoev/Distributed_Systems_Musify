@@ -7,11 +7,12 @@ import com.distributedApplications.Musify.repository.AlbumRepository;
 import com.distributedApplications.Musify.repository.ArtistRepository;
 import com.distributedApplications.Musify.repository.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class SongService {
@@ -28,10 +29,13 @@ public class SongService {
     @Autowired
     private SongMapper songMapper;
 
-    public List<SongDTO> getAllSongs() {
-        return songRepository.findAll().stream()
-                .map(songMapper::convertToDTO)
-                .collect(Collectors.toList());
+    public Page<SongDTO> getAllSongs(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return songRepository.findAll(pageable).map(songMapper::convertToDTO);
+    }
+
+    public Integer getNumberOfSongs(Long id) {
+        return songRepository.countByAlbumId(id);
     }
 
     public SongDTO createSong(SongDTO songDTO) {
@@ -43,15 +47,16 @@ public class SongService {
     public SongDTO updateSong(Long id, SongDTO songDTO) {
         Optional<Song> song = songRepository.findById(id);
         Song songEntity = new Song();
+
         if (song.isPresent()) {
-            songEntity.setId(songDTO.getId());
+            songEntity = song.get();
             songEntity.setTitle(songDTO.getTitle());
             songEntity.setDuration(songDTO.getDuration());
             songEntity.setGenre(songDTO.getGenre());
             songEntity.setReleaseDate(songDTO.getReleaseDate());
             songEntity.setArtist(artistRepository.findById(songDTO.getArtistId()).isPresent() ? artistRepository.findById(songDTO.getArtistId()).get() : null);
             songEntity.setAlbum(albumRepository.findById(songDTO.getAlbumId()).isPresent() ? albumRepository.findById(songDTO.getAlbumId()).get() : null);
-            songEntity = songRepository.save(songEntity);
+            songRepository.save(songEntity);
         }
 
         return songMapper.convertToDTO(songEntity);

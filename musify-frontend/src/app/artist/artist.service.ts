@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
-import {Artist} from '../model/artist.model';
-import {HttpClient} from "@angular/common/http";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Artist } from '../model/artist.model';
 
 @Injectable({
   providedIn: 'root'
@@ -9,27 +9,18 @@ import {HttpClient} from "@angular/common/http";
 export class ArtistService {
   private apiUrl = 'http://localhost:8080/api/artist';
 
-  constructor(private http: HttpClient) {
-  }
+  constructor(private http: HttpClient) {}
 
-  getAllArtists(): Observable<Artist[]> {
-    return this.http.get<Artist[]>(this.apiUrl);
-  }
-
-  getArtistById(id: number): Observable<Artist> {
-    return this.http.get<Artist>(`${this.apiUrl}/${id}`);
-  }
-
-  getArtistByName(name: string): Observable<Artist> {
-    return this.http.get<Artist>(`${this.apiUrl}?name=${name}`);
-  }
-
-  addArtist(artist: Artist): Observable<Artist> {
-    return this.http.post<Artist>(this.apiUrl, artist);
+  getAllArtists(page: number, size: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}?page=${page}&size=${size}`);
   }
 
   updateArtist(artist: Artist): Observable<Artist> {
     return this.http.put<Artist>(`${this.apiUrl}/${artist.id}`, artist);
+  }
+
+  addArtist(artist: Artist): Observable<Artist> {
+    return this.http.post<Artist>(this.apiUrl, artist);
   }
 
   deleteArtist(id: number): Observable<void> {

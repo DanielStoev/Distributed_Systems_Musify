@@ -2,11 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ArtistService } from '../artist/artist.service';
-import { Artist } from '../model/artist.model';
 import { AlbumService } from './album.service';
 import { Album } from '../model/album.model';
-import { SongService } from '../song/song.service';
-import { Song } from '../model/song.model';
+import { Artist } from '../model/artist.model';
 
 @Component({
   selector: 'app-album',
@@ -14,12 +12,11 @@ import { Song } from '../model/song.model';
   imports: [NgFor, NgIf, FormsModule],
   templateUrl: './album.component.html',
   styleUrls: ['./album.component.css'],
-  providers: [AlbumService, ArtistService, SongService]
+  providers: [AlbumService, ArtistService]
 })
 export class AlbumComponent implements OnInit {
   albums: Album[] = [];
   artists: Artist[] = [];
-  songs: Song[] = [];
   selectedAlbum: Album | null = null;
   newAlbum: Album = {
     id: 0,
@@ -28,25 +25,34 @@ export class AlbumComponent implements OnInit {
     artistId: 0,
     songIds: []
   };
+  page: number = 0;
+  size: number = 5;
+  totalPages: number = 0;
+  songCounts: { [albumId: number]: number } = {};
 
-  constructor(private albumService: AlbumService, private artistService: ArtistService, private songService: SongService) {}
+  constructor(private albumService: AlbumService, private artistService: ArtistService) {}
 
   ngOnInit(): void {
     this.loadAlbums();
-    this.loadArtists();
-    this.loadSongs();
+    this.loadArtists(this.page, this.size);
   }
 
   loadAlbums(): void {
-    this.albumService.getAllAlbums().subscribe((albums) => (this.albums = albums));
+    this.albumService.getAllAlbums(this.page, this.size).subscribe(response => {
+      if (response && Array.isArray(response.content)) {
+        this.albums = response.content;
+        this.totalPages = response.totalPages || 0;
+        this.albums.forEach(album => this.loadSongCount(album.id));
+      }
+    });
   }
 
-  loadArtists(): void {
-    this.artistService.getAllArtists().subscribe((artists) => (this.artists = artists));
-  }
-
-  loadSongs(): void {
-    this.songService.getAllSongs().subscribe((songs) => (this.songs = songs));
+  loadArtists(page: number, size: number): void {
+    this.artistService.getAllArtists(page, size).subscribe(response => {
+      if (response && Array.isArray(response.content)) {
+        this.artists = response.content;
+      }
+    });
   }
 
   getArtistName(artistId: number): string {
@@ -54,8 +60,10 @@ export class AlbumComponent implements OnInit {
     return artist ? artist.name : 'Unknown Artist';
   }
 
-  getNumberOfSongs(albumId: number): number {
-    return this.songs.filter(song => song.albumId === albumId).length;
+  loadSongCount(albumId: number): void {
+    this.albumService.getNumberOfSongs(albumId).subscribe(count => {
+      this.songCounts[albumId] = count;
+    });
   }
 
   selectAlbum(album: Album): void {
@@ -87,5 +95,12 @@ export class AlbumComponent implements OnInit {
       this.loadAlbums();
       this.newAlbum = { id: 0, title: '', releaseDate: new Date(), artistId: 0, songIds: [] };
     });
+  }
+
+  goToPage(page: number): void {
+    if (page >= 0 && page < this.totalPages) {
+      this.page = page;
+      this.loadAlbums();
+    }
   }
 }

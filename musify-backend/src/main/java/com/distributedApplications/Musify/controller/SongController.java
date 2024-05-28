@@ -3,10 +3,9 @@ package com.distributedApplications.Musify.controller;
 import com.distributedApplications.Musify.dto.SongDTO;
 import com.distributedApplications.Musify.service.SongService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/songs")
@@ -16,8 +15,9 @@ public class SongController {
     private SongService songService;
 
     @GetMapping
-    public List<SongDTO> getAllSongs() {
-        return songService.getAllSongs();
+    public Page<SongDTO> getAllSongs(@RequestParam(defaultValue = "0") int page,
+                                     @RequestParam(defaultValue = "10") int size) {
+        return songService.getAllSongs(page, size);
     }
 
     @PostMapping

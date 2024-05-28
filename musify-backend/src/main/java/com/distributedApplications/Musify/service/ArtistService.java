@@ -5,11 +5,12 @@ import com.distributedApplications.Musify.dto.ArtistDTO;
 import com.distributedApplications.Musify.entity.Artist;
 import com.distributedApplications.Musify.repository.ArtistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class ArtistService {
@@ -20,10 +21,9 @@ public class ArtistService {
     @Autowired
     private ArtistMapper artistMapper;
 
-    public List<ArtistDTO> getAllArtists() {
-        return artistRepository.findAll().stream()
-                .map(artistMapper::convertToDTO)
-                .collect(Collectors.toList());
+    public Page<ArtistDTO> getAllArtists(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return artistRepository.findAll(pageable).map(artistMapper::convertToDTO);
     }
 
     public ArtistDTO createArtist(ArtistDTO artistDTO) {
@@ -37,11 +37,11 @@ public class ArtistService {
         Artist artistEntity = new Artist();
 
         if (artist.isPresent()) {
-            artistEntity.setId(artistDTO.getId());
+            artistEntity = artist.get();
             artistEntity.setName(artistDTO.getName());
             artistEntity.setCountry(artistDTO.getCountry());
             artistEntity.setBirthDate(artistDTO.getBirthDate());
-            artistEntity = artistRepository.save(artistEntity);
+            artistRepository.save(artistEntity);
         }
 
         return artistMapper.convertToDTO(artistEntity);

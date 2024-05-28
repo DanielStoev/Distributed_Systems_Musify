@@ -6,11 +6,12 @@ import com.distributedApplications.Musify.entity.Album;
 import com.distributedApplications.Musify.repository.AlbumRepository;
 import com.distributedApplications.Musify.repository.ArtistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class AlbumService {
@@ -24,10 +25,9 @@ public class AlbumService {
     @Autowired
     private AlbumMapper albumMapper;
 
-    public List<AlbumDTO> getAllAlbums() {
-        return albumRepository.findAll().stream()
-                .map(albumMapper::convertToDTO)
-                .collect(Collectors.toList());
+    public Page<AlbumDTO> getAllAlbums(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return albumRepository.findAll(pageable).map(albumMapper::convertToDTO);
     }
 
     public AlbumDTO createAlbum(AlbumDTO albumDTO) {
@@ -43,9 +43,8 @@ public class AlbumService {
         if (album.isPresent()) {
             albumEntity = album.get();
             albumEntity.setTitle(albumDTO.getTitle());
-            albumEntity.setNumberOfSongs(albumDTO.getNumberOfSongs());
             albumEntity.setReleaseDate(albumDTO.getReleaseDate());
-            albumEntity.setArtist(artistRepository.findById(albumDTO.getArtistId()).isPresent() ? artistRepository.findById(albumDTO.getArtistId()).get() : null);
+            albumEntity.setArtist(artistRepository.findById(albumDTO.getArtistId()).orElse(null));
             albumRepository.save(albumEntity);
         }
 
