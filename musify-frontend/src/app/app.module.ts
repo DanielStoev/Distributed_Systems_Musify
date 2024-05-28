@@ -1,18 +1,26 @@
-import {NgModule} from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
-import {HttpClientModule} from '@angular/common/http';
-import {AppComponent} from './app.component';
-import {AppRoutingModule} from './app.routes';
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app.routes';
+import { AuthService } from './auth/auth.service';
+import { AuthGuard } from './auth/auth.guard';
+import { LoginComponent } from './auth/login.component';
 
 @NgModule({
+  declarations: [
+
+  ],
   imports: [
     BrowserModule,
     HttpClientModule,
+    FormsModule,
     AppRoutingModule,
-    AppComponent
+    LoginComponent,
+    AppComponent,
   ],
-  providers: [],
+  providers: [AuthService, AuthGuard],
   bootstrap: []
 })
-export class AppModule {
-}
+export class AppModule { }
