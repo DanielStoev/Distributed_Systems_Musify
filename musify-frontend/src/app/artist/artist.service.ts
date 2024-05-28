@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Artist } from '../model/artist.model';
 
@@ -8,6 +8,9 @@ import { Artist } from '../model/artist.model';
 })
 export class ArtistService {
   private apiUrl = 'http://localhost:8080/api/artist';
+  private headers = new HttpHeaders({
+    'Authorization': 'Basic ' + btoa('user:password')
+  });
 
   constructor(private http: HttpClient) {}
 
